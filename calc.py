@@ -6,7 +6,10 @@ import sys
 # Reserved words
 reserved = {
     'e': 'E',
-    'pi': 'PI'
+    'pi': 'PI',
+    'sin': 'SIN',
+    'cos': 'COS',
+    'tan': 'TAN'
 }
 
 # Define tokens
@@ -75,6 +78,7 @@ lexer = lex.lex()
 # Giving precedence definitions
 precedence = (
     ('right', 'EXPONENT', 'RT'),
+    ('right', 'SIN', 'COS', 'TAN'),
     ('left', 'PLUS', 'MINUS'),
     ('left', 'MULTIPLY', 'DIVIDE')
 
@@ -137,6 +141,18 @@ def p_expression_e(p):
     'expression : E'
     p[0] = math.e
 
+def p_expression_sin(p):
+    'expression : SIN expression'
+    p[0] = math.sin(p[2])
+
+def p_expression_cos(p):
+    'expression : COS expression'
+    p[0] = math.cos(p[2])
+
+def p_expression_tan(p):
+    'expression : TAN expression'
+    p[0] = math.tan(p[2])
+
 # Error message
 def p_error(p):
     print("Syntax error; please try again")
@@ -182,7 +198,7 @@ def run(p):
 print('Simple calculator for COS 360, please see below for usage directions: \n - a root b: a&b \n - a to the power of b: a^b \n - π: pi\n - number e: e')
 while True:
     try:
-        s = input('>>> ')
+        s = input('>> ')
     except EOFError:
         break
     parser.parse(s)
